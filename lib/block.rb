@@ -135,6 +135,11 @@ class Block
 
   def add (other)
     # Implement.
+    if (!overlaps?(other) && !intersects_top?(other) && !intersects_bottom?(other) && !covers?(other) && !surrounds?(other))
+      [Block.new(other.top, other.bottom), Block.new(top, bottom)]
+    else
+      [Block.new([top, other.top].min, [bottom, other.bottom].max)]
+    end
   end
   
   # Return the result of subtracting the other Block (or Blocks) from self.

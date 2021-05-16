@@ -166,5 +166,14 @@ class Block
 
   def merge (others)
     # Implement.
+    temp_merge = []
+
+    others.each do |blk|
+      temp_merge = self + blk if intersects_top?(blk) || intersects_bottom?(blk)
+    end
+
+    others_merge = Block.merge(others)
+    merge_result = others_merge + temp_merge # ruby arrays addition
+    Block.merge(merge_result)
   end
 end

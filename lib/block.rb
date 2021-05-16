@@ -146,6 +146,20 @@ class Block
 
   def subtract (other)
     # Implement.
+
+    if union(other) == other || !intersects_top?(other) && !intersects_bottom?(other) && !covers?(other) && !surrounds?(other)
+      []
+    elsif !intersects_bottom?(other) && !covers?(other) && !surrounds?(other)
+      []
+    elsif !overlaps?(other) && !intersects_top?(other) && !covers?(other) && !surrounds?(other)
+      []
+    elsif overlaps?(other) && intersects_bottom?(other) || overlaps?(other) && !covers?(other) && !surrounds?(other)
+      [Block.new([top, other.bottom].max, [bottom, other.bottom].max)]
+    elsif overlaps?(other) && intersects_top?(other)
+      [Block.new(top, other.top)]
+    else
+      split(other)
+    end
   end
 
   alias :- :subtract

@@ -146,6 +146,25 @@ class Block
 
   def subtract (other)
     # Implement.
+    temp_result = []
+    if other.class.name != Block.name # array passed
+      other.each do |blk|
+        temp_result.push(trim_from (blk.top)) if intersects_top?(blk)
+        temp_result.push(blk) if surrounds? (blk)
+        temp_result.push(trim_to (blk.bottom)) if intersects_bottom?(blk)
+      end
+
+      sa = []
+      temp_blk = Block.new(top, bottom)
+      temp_result.each do |a|
+
+        temp_blk = Block.new(a.top, temp_blk.bottom || bottom) if intersects_top?(a)
+        temp_blk = Block.new(temp_blk.top || top, a.bottom) if intersects_bottom?(a)
+        sa.push(a) if surrounds?(a)
+
+      end
+      return temp_blk.split(sa.first)
+    end
 
     if union(other) == other || !intersects_top?(other) && !intersects_bottom?(other) && !covers?(other) && !surrounds?(other)
       []
